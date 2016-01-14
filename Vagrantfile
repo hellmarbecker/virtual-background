@@ -22,7 +22,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision :shell do |s|
     s.path = File.join( Dir.pwd, "provisioner.sh" )
-    s.args = [ ssh_key_pub, ssh_key, $NSLAVES ]
   end
 
 end
