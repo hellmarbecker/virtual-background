@@ -1,5 +1,6 @@
-# vagrant-ranger-buildbox
+# vagrant-virtual-background
 
-Automated provisioning of a build VM.
+Create a Vagrant VM to install the Virtual Background solution by Ben Elder: https://elder.dev/posts/open-source-virtual-background/
 
-This expects that MySQL and Eclipse packages be present in the build directory.
+- Virtualization provider: VirtualBox
+- Base OS: Debian 10 Buster
