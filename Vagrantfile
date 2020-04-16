@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "debian/buster64"
 
-  config.vm.hostname = "ranger.localdomain"
+  config.vm.hostname = "zoombox.localdomain"
   config.vm.network "private_network", ip: "192.168.17.31"
   config.ssh.forward_x11 = true
 
