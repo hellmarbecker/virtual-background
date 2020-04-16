@@ -15,5 +15,9 @@ touch $tagfile
 echo "$0 : running provisioner"
 
 # code goes here
+export DEBIAN_FRONTEND=noninteractive
+sudo apt-get -y update
+sudo apt-get -y dist-upgrade
+sudo apt-get -y install nodejs
 
 echo "$0 : done" 
