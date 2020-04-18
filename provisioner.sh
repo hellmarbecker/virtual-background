@@ -18,6 +18,12 @@ echo "$0 : running provisioner"
 export DEBIAN_FRONTEND=noninteractive
 sudo apt-get -y update
 sudo apt-get -y dist-upgrade
-sudo apt-get -y install nodejs
+sudo apt-get -y install curl
+
+sudo apt-get -y install python3-pip
+sudo pip3 install --upgrade pip
+sudo pip3 install numpy
+
+# sudo apt-get -y install nodejs
 
 echo "$0 : done" 
