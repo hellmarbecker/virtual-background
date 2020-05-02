@@ -18,6 +18,10 @@ Vagrant.configure(2) do |config|
     # Fix DNS for use with VPN tunnel,
     # see http://askubuntu.com/questions/238040/how-do-i-fix-name-service-for-vagrant-client
     vb.customize [ "modifyvm", :id, "--natdnshostresolver1", "on" ]
+    # Attach webcam
+    # TODO: how can we read out the default webcam?
+    # Like using [VBoxManage list webcams]
+    vb.customize [ "controlvm", :id, "webcam", "attach", ".1" ]
   end
 
   config.vm.provision :shell do |s|
