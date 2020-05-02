@@ -34,7 +34,7 @@ Vagrant.configure(2) do |config|
     # Attach webcam
     # TODO: how can we read out the default webcam?
     # Like using [VBoxManage list webcams]
-    vb.customize [ "controlvm", :id, "webcam", "attach", ".1" ]
+    # vb.customize [ "controlvm", :id, "webcam", "attach", ".1" ]
   end
 
   config.vm.provision :shell do |s|
@@ -46,7 +46,6 @@ Vagrant.configure(2) do |config|
     trigger.run = {
       inline: "VBoxManage controlvm #{:id} webcam attach .1",
     }
- 
   end
 
 end
