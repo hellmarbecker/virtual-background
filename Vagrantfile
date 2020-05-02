@@ -40,5 +40,13 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell do |s|
     s.path = File.join( Dir.pwd, "provisioner.sh" )
   end
+  
+  config.trigger.after [ :up, :reload ] do |trigger|
+    trigger.info = "Mount webcam to #{:id}"
+    trigger.run = {
+      inline: "VBoxManage controlvm #{:id} webcam attach .1",
+    }
+ 
+  end
 
 end
