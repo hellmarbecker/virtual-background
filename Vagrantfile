@@ -42,11 +42,14 @@ Vagrant.configure(2) do |config|
   end
   
   config.trigger.after [ :up, :reload ] do |trigger|
-    trigger.info = "Mount webcam to #{:id}"
-    trigger.info = "VBox path is #{ENV[\"VBOX_MSI_INSTALL_PATH]\"}"
-    trigger.run = {
-      inline: "VBoxManage controlvm #{:id} webcam attach .1",
-    }
+    if File.file?(File.expand_path(".vagrant\\machines\\default\\virtualbox\\id"))
+      id = File.read(".vagrant\\machines\\default\\virtualbox\\id")
+      trigger.info = "Mount webcam to #{id}"
+      trigger.info = "VBox path is #{ENV['VBOX_MSI_INSTALL_PATH']}"
+      trigger.run = {
+        inline: "\"#{ENV['VBOX_MSI_INSTALL_PATH']}\\VBoxManage\" controlvm #{id} webcam attach .1",
+      }
+    end
   end
 
 end
