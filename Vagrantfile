@@ -14,10 +14,23 @@ Vagrant.configure(2) do |config|
   config.ssh.forward_x11 = true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"
+    vb.memory = "512"
     # Fix DNS for use with VPN tunnel,
     # see http://askubuntu.com/questions/238040/how-do-i-fix-name-service-for-vagrant-client
-    vb.customize [ "modifyvm", :id, "--natdnshostresolver1", "on" ]
+    vb.customize [ "modifyvm", :id,
+      "--vram", "256",
+      "--accelerate3d", "on",
+      "--clipboard", "bidirectional",
+      "--hwvirtex", "on",
+      "--nestedpaging", "on",
+      "--largepages", "on",
+      "--ioapic", "on",
+      "--pae", "on",
+      "--paravirtprovider", "kvm",
+      "--natdnshostresolver1", "on",
+      "--usb", "on",
+      "--usbehci", "on",      
+    ]
     # Attach webcam
     # TODO: how can we read out the default webcam?
     # Like using [VBoxManage list webcams]
