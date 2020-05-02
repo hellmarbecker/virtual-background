@@ -43,6 +43,7 @@ Vagrant.configure(2) do |config|
   
   config.trigger.after [ :up, :reload ] do |trigger|
     trigger.info = "Mount webcam to #{:id}"
+    trigger.info = "VBox path is #{ENV[\"VBOX_MSI_INSTALL_PATH]\"}"
     trigger.run = {
       inline: "VBoxManage controlvm #{:id} webcam attach .1",
     }
