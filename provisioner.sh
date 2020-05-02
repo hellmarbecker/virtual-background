@@ -16,9 +16,9 @@ echo "$0 : running provisioner"
 
 # code goes here
 export DEBIAN_FRONTEND=noninteractive
-sudo apt-get -y update
-sudo apt-get -y dist-upgrade
-sudo apt-get -y install curl
+sudo apt-get -y -qq update
+sudo apt-get -y -qq dist-upgrade
+sudo apt-get -y -qq install curl
 
 # sudo apt-get -y install python3-pip
 # sudo pip3 install --upgrade pip
