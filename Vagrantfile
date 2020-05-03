@@ -1,12 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
 Vagrant.configure(2) do |config|
 
+  # Use Debian Stretch - I had issues with package hashes when using Python 3 on Debian Buster
   config.vm.box = "debian/contrib-stretch64"
 
   config.vm.hostname = "zoombox.localdomain"
@@ -15,8 +12,10 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
-    # Fix DNS for use with VPN tunnel,
-    # see http://askubuntu.com/questions/238040/how-do-i-fix-name-service-for-vagrant-client
+    # "--natdnshostresolver1": Fix DNS for use with VPN tunnel,
+    # see http://askubuntu.com/questions/238040/how-do-i-fix-name-service-for-vagrant-client.
+    # Most of the other options are courtesy of 
+    # https://github.com/yoneken/Win-vagrant-Ubuntu-webcam.
     vb.customize [ "modifyvm", :id,
       "--name", "zoombox",
       "--vram", "256",
@@ -34,14 +33,16 @@ Vagrant.configure(2) do |config|
     ]
   end
 
-  # config.vm.provision :shell do |s|
-  #   s.path = File.join( Dir.pwd, "provisioner.sh" )
-  # end
+  config.vm.provision :shell do |s|
+    s.path = File.join( Dir.pwd, "provisioner.sh" )
+  end
   
   config.trigger.after [ :up, :reload ] do |t|
     # Attach webcam
-    # TODO: how can we read out the default webcam?
-    # Like using [VBoxManage list webcams]
+    # Possible upgrade: Select webcam instead of just using the default ".0",
+    # like using [VBoxManage list webcams]
+    # Note: VirtualBox does not put itself into PATH and I don't wnat to change that,
+    # so read out the install path from the corresponding environment variable
     t.info = "Mount webcam to \"zoombox\". VirtualBox path is #{ENV['VBOX_MSI_INSTALL_PATH']}"
     t.run = {
       path: File.join( ENV['VBOX_MSI_INSTALL_PATH'], "VBoxManage.exe" ),
