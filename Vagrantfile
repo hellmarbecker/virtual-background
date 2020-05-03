@@ -18,6 +18,7 @@ Vagrant.configure(2) do |config|
     # Fix DNS for use with VPN tunnel,
     # see http://askubuntu.com/questions/238040/how-do-i-fix-name-service-for-vagrant-client
     vb.customize [ "modifyvm", :id,
+      "--name", "zoombox",
       "--vram", "256",
       "--accelerate3d", "on",
       "--clipboard", "bidirectional",
@@ -37,19 +38,16 @@ Vagrant.configure(2) do |config|
     # vb.customize [ "controlvm", :id, "webcam", "attach", ".1" ]
   end
 
-  config.vm.provision :shell do |s|
-    s.path = File.join( Dir.pwd, "provisioner.sh" )
-  end
+  # config.vm.provision :shell do |s|
+  #   s.path = File.join( Dir.pwd, "provisioner.sh" )
+  # end
   
   config.trigger.after [ :up, :reload ] do |trigger|
-    if File.file?(File.expand_path(".vagrant\\machines\\default\\virtualbox\\id"))
-      id = File.read(".vagrant\\machines\\default\\virtualbox\\id")
-      trigger.info = "Mount webcam to #{id}"
-      trigger.info = "VBox path is #{ENV['VBOX_MSI_INSTALL_PATH']}"
-      trigger.run = {
-        inline: "\"#{ENV['VBOX_MSI_INSTALL_PATH']}\\VBoxManage\" controlvm #{id} webcam attach .1",
-      }
-    end
+    # trigger.info = "Mount webcam to \"zoombox\""
+    trigger.info = "VBox path is #{ENV['VBOX_MSI_INSTALL_PATH']}"
+    trigger.run = {
+      inline: "\"#{ENV['VBOX_MSI_INSTALL_PATH']}VBoxManage\" controlvm \"zoombox\" webcam attach .0",
+    }
   end
 
 end
