@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
   config.ssh.forward_x11 = true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "512"
+    vb.memory = "1024"
     # Fix DNS for use with VPN tunnel,
     # see http://askubuntu.com/questions/238040/how-do-i-fix-name-service-for-vagrant-client
     vb.customize [ "modifyvm", :id,
@@ -32,21 +32,20 @@ Vagrant.configure(2) do |config|
       "--usb", "on",
       "--usbehci", "on",      
     ]
-    # Attach webcam
-    # TODO: how can we read out the default webcam?
-    # Like using [VBoxManage list webcams]
-    # vb.customize [ "controlvm", :id, "webcam", "attach", ".1" ]
   end
 
   # config.vm.provision :shell do |s|
   #   s.path = File.join( Dir.pwd, "provisioner.sh" )
   # end
   
-  config.trigger.after [ :up, :reload ] do |trigger|
-    # trigger.info = "Mount webcam to \"zoombox\""
-    trigger.info = "VBox path is #{ENV['VBOX_MSI_INSTALL_PATH']}"
-    trigger.run = {
-      inline: "\"#{ENV['VBOX_MSI_INSTALL_PATH']}VBoxManage\" controlvm \"zoombox\" webcam attach .0",
+  config.trigger.after [ :up, :reload ] do |t|
+    # Attach webcam
+    # TODO: how can we read out the default webcam?
+    # Like using [VBoxManage list webcams]
+    t.info = "Mount webcam to \"zoombox\". VirtualBox path is #{ENV['VBOX_MSI_INSTALL_PATH']}"
+    t.run = {
+      path: File.join( ENV['VBOX_MSI_INSTALL_PATH'], "VBoxManage.exe" ),
+      args: [ "controlvm", "zoombox", "webcam", "attach", ".0" ],
     }
   end
 
