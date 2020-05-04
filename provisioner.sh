@@ -15,15 +15,23 @@ touch $tagfile
 echo "$0 : running provisioner"
 
 # code goes here
+
+# Some prerequisites
 export DEBIAN_FRONTEND=noninteractive
-sudo apt-get -y -qq update
-sudo apt-get -y -qq dist-upgrade
-sudo apt-get -y -qq install curl
+sudo apt-get -y update
+sudo apt-get -y dist-upgrade
+sudo apt-get -y install xauth
+sudo apt-get -y install curl
 
-# sudo apt-get -y install python3-pip
-# sudo pip3 install --upgrade pip
-# sudo pip3 install numpy
+# Python required packages
+sudo apt-get -y -qq install python3-pip
+sudo pip3 install --upgrade pip
+sudo pip3 install numpy
 
-# sudo apt-get -y install nodejs
+# Javascript dependencies
+sudo apt-get -y install nodejs
+
+# Zoom client
+curl -L -O https://zoom.us/client/latest/zoom_amd64.deb
 
 echo "$0 : done" 
