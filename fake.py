@@ -81,7 +81,12 @@ cap.set(cv2.CAP_PROP_FPS, 60)
 
 # load the virtual background
 background = cv2.imread("star-wars-feature-vf-2019-summer-embed-07.jpg")
-background_scaled = cv2.resize(background, (width, height))
+# resize without distortion
+bk_height, bk_width, _ = background.shape
+height_new = (bk_height * width) // bk_width
+height_offset = (height_new - height) // 2
+background_scaled_raw = cv2.resize(background, (width, height_new))
+background_scaled = background_scaled_raw[height_offset:(height_offset+height), 0:width]
 
 # frames forever
 # while True:
