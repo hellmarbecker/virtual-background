@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import requests
-import pyfakewebcam
+# import pyfakewebcam
 
 def get_mask(frame, bodypix_url='http://localhost:9000'):
     _, data = cv2.imencode(".jpg", frame)
@@ -18,7 +18,6 @@ def post_process_mask(mask):
     mask = cv2.dilate(mask, np.ones((10,10), np.uint8) , iterations=1)
     mask = cv2.blur(mask.astype(float), (30,30))
     return mask
-
 
 def shift_image(img, dx, dy):
     img = np.roll(img, dy, axis=0)
@@ -59,8 +58,11 @@ def get_frame(cap, background_scaled):
         except requests.RequestException:
             print("mask request failed, retrying")
     # post-process mask and frame
+    print("got mask")
     mask = post_process_mask(mask)
+    print("after post_process")
     frame = hologram_effect(frame)
+    print("after holo")
     # composite the foreground and background
     inv_mask = 1-mask
     for c in range(frame.shape[2]):
@@ -68,22 +70,23 @@ def get_frame(cap, background_scaled):
     return frame
 
 # setup access to the *real* webcam
-cap = cv2.VideoCapture('/dev/video0')
+cap = cv2.VideoCapture(0)
 height, width = 720, 1280
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
 # setup the fake camera
-fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height)
+# fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height)
 
 # load the virtual background
-background = cv2.imread("/data/background.jpg")
+background = cv2.imread("star-wars-feature-vf-2019-summer-embed-07.jpg")
 background_scaled = cv2.resize(background, (width, height))
 
 # frames forever
-while True:
-    frame = get_frame(cap, background_scaled)
+# while True:
+frame = get_frame(cap, background_scaled)
+cv2.imwrite("test2.jpg", frame)
     # fake webcam expects RGB
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    fake.schedule_frame(frame)
+    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # fake.schedule_frame(frame)

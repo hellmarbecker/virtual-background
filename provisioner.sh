@@ -22,6 +22,7 @@ export DEBIAN_FRONTEND=noninteractive
 sudo apt-get -y update
 sudo apt-get -y dist-upgrade
 sudo apt-get -y install xauth
+sudo apt-get -y install pulseaudio # for pactl
 sudo apt-get -y install curl
 
 # Python required packages
