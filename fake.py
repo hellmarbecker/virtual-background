@@ -1,8 +1,9 @@
 import os
+import time
 import cv2
 import numpy as np
 import requests
-# import pyfakewebcam
+# import obspython as obs
 
 def get_mask(frame, bodypix_url='http://localhost:9000'):
     _, data = cv2.imencode(".jpg", frame)
@@ -58,11 +59,8 @@ def get_frame(cap, background_scaled):
         except requests.RequestException:
             print("mask request failed, retrying")
     # post-process mask and frame
-    print("got mask")
     mask = post_process_mask(mask)
-    print("after post_process")
     frame = hologram_effect(frame)
-    print("after holo")
     # composite the foreground and background
     inv_mask = 1-mask
     for c in range(frame.shape[2]):
@@ -89,9 +87,12 @@ background_scaled_raw = cv2.resize(background, (width, height_new))
 background_scaled = background_scaled_raw[height_offset:(height_offset+height), 0:width]
 
 # frames forever
-# while True:
-frame = get_frame(cap, background_scaled)
-cv2.imwrite("test2.jpg", frame)
+while True:
+    frame = get_frame(cap, background_scaled)
+    cv2.imshow("Virtual Webcam Image", frame)
+    cv2.waitKey(1) # waits until a key is pressed
+    # cv2.destroyAllWindows() # destroys the window showing image
+    # cv2.imwrite("test2.jpg", frame)
     # fake webcam expects RGB
     # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     # fake.schedule_frame(frame)
