@@ -70,6 +70,7 @@ def get_frame(cap, background_scaled):
 # setup access to the *real* webcam
 cap = cv2.VideoCapture(0)
 height, width = 720, 1280
+aspect_ratio = height / width
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 cap.set(cv2.CAP_PROP_FPS, 60)
@@ -78,13 +79,21 @@ cap.set(cv2.CAP_PROP_FPS, 60)
 # fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height)
 
 # load the virtual background
-background = cv2.imread("star-wars-feature-vf-2019-summer-embed-07.jpg")
+# background = cv2.imread("star-wars-feature-vf-2019-summer-embed-07.jpg")
+background = cv2.imread("anakin-and-the-jedi-council.jpg")
 # resize without distortion
 bk_height, bk_width, _ = background.shape
-height_new = (bk_height * width) // bk_width
-height_offset = (height_new - height) // 2
-background_scaled_raw = cv2.resize(background, (width, height_new))
-background_scaled = background_scaled_raw[height_offset:(height_offset+height), 0:width]
+bk_aspect_ratio = bk_height / bk_width
+if bk_aspect_ratio > aspect_ratio:
+    height_new = (bk_height * width) // bk_width
+    height_offset = (height_new - height) // 2
+    background_scaled_raw = cv2.resize(background, (width, height_new))
+    background_scaled = background_scaled_raw[height_offset:(height_offset+height), 0:width]
+else:
+    width_new = (bk_width * height) // bk_height
+    width_offset = (width_new - width) // 2
+    background_scaled_raw = cv2.resize(background, (width_new, height))
+    background_scaled = background_scaled_raw[0:height, width_offset:(width_offset+width)]
 
 # frames forever
 while True:
