@@ -3,7 +3,6 @@ import time
 import cv2
 import numpy as np
 import requests
-# import obspython as obs
 
 def get_mask(frame, bodypix_url='http://localhost:9000'):
     _, data = cv2.imencode(".jpg", frame)
@@ -67,41 +66,41 @@ def get_frame(cap, background_scaled):
         frame[:,:,c] = frame[:,:,c]*mask + background_scaled[:,:,c]*inv_mask
     return frame
 
-# setup access to the *real* webcam
-cap = cv2.VideoCapture(0)
-height, width = 720, 1280
-aspect_ratio = height / width
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-cap.set(cv2.CAP_PROP_FPS, 60)
+def main():
+    # setup access to the *real* webcam
+    cap = cv2.VideoCapture(0)
+    height, width = 720, 1280
+    aspect_ratio = height / width
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+    cap.set(cv2.CAP_PROP_FPS, 60)
 
-# setup the fake camera
-# fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height)
+    # setup the fake camera
+    # fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height)
 
-# load the virtual background
-# background = cv2.imread("star-wars-feature-vf-2019-summer-embed-07.jpg")
-background = cv2.imread("anakin-and-the-jedi-council.jpg")
-# resize without distortion
-bk_height, bk_width, _ = background.shape
-bk_aspect_ratio = bk_height / bk_width
-if bk_aspect_ratio > aspect_ratio:
-    height_new = (bk_height * width) // bk_width
-    height_offset = (height_new - height) // 2
-    background_scaled_raw = cv2.resize(background, (width, height_new))
-    background_scaled = background_scaled_raw[height_offset:(height_offset+height), 0:width]
-else:
-    width_new = (bk_width * height) // bk_height
-    width_offset = (width_new - width) // 2
-    background_scaled_raw = cv2.resize(background, (width_new, height))
-    background_scaled = background_scaled_raw[0:height, width_offset:(width_offset+width)]
+    # load the virtual background
+    # background = cv2.imread("star-wars-feature-vf-2019-summer-embed-07.jpg")
+    background = cv2.imread("anakin-and-the-jedi-council.jpg")
+    # resize without distortion
+    bk_height, bk_width, _ = background.shape
+    bk_aspect_ratio = bk_height / bk_width
+    if bk_aspect_ratio > aspect_ratio:
+        height_new = (bk_height * width) // bk_width
+        height_offset = (height_new - height) // 2
+        background_scaled_raw = cv2.resize(background, (width, height_new))
+        background_scaled = background_scaled_raw[height_offset:(height_offset+height), 0:width]
+    else:
+        width_new = (bk_width * height) // bk_height
+        width_offset = (width_new - width) // 2
+        background_scaled_raw = cv2.resize(background, (width_new, height))
+        background_scaled = background_scaled_raw[0:height, width_offset:(width_offset+width)]
 
-# frames forever
-while True:
-    frame = get_frame(cap, background_scaled)
-    cv2.imshow("Virtual Webcam Image", frame)
-    cv2.waitKey(1) # waits until a key is pressed
-    # cv2.destroyAllWindows() # destroys the window showing image
-    # cv2.imwrite("test2.jpg", frame)
-    # fake webcam expects RGB
-    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    # fake.schedule_frame(frame)
+    # frames forever
+    while True:
+        frame = get_frame(cap, background_scaled)
+        cv2.imshow("Virtual Webcam Image", frame)
+        cv2.waitKey(1) # waits until a key is pressed, or max 1 msec
+        # cv2.destroyAllWindows() # destroys the window showing image
+
+if __name__ == "__main__":
+    main()
