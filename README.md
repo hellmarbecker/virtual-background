@@ -12,7 +12,7 @@ Usage:
 
   1. Install necessary node.js packages using `npm i`
   2. Run the Tensorflow model `node app.js`
-  3. Run the Python script `python fake.py` or `python async.py`
+  3. Run the Python script `python fake.py` or `python fake_async.py`
   4. Set up window capture in OBS
   
 The asynchronous version continues to render new frames while it waits for the mask to be generated. Thus you get smooth movements of the live image, but the mask always lags behind.
